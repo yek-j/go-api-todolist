@@ -2,23 +2,49 @@ package connector
 
 import (
 	"context"
-	"log"
+	"encoding/json"
+	"os"
 
 	"to-do-list/ent"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
+type DBConfig struct {
+	Dbuser string `json:"dbuser"`
+	DbServer string `json:"dbserver"`
+	Dbname string `json:"dbname"`
+	Dbpwd string `json:"dbpwd"`
+}
+
 func Connector() (*ent.Client, context.Context) {
-	db, err := ent.Open("mysql", "root:MYSQLroot1234@tcp(localhost:3306)/todolist?parseTime=True")
+	var config DBConfig 
+	cwd, err := os.Getwd()
 	if err != nil {
-		log.Fatalf("DB 접속 실패 mysql 버전: %v", err)
+		panic(err)
+	}
+	
+	file, err := os.Open(cwd + "\\db\\config.json")
+
+	defer file.Close()
+	if err != nil {
+		panic(err)
+	}
+
+	configParser := json.NewDecoder(file)
+	dcerr := configParser.Decode(&config)
+	if dcerr != nil {
+		panic(err)
+	}
+
+	mysqlConfig := config.Dbuser+":"+config.Dbpwd+"@tcp("+config.DbServer+")/"+config.Dbname+"?parseTime=True"
+
+	db, err := ent.Open("mysql", mysqlConfig)
+	if err != nil {
+		panic(err)
 	} 
 	
 	ctx := context.Background()
-
-	
-	
 
 	return db, ctx;
 }
