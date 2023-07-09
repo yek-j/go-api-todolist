@@ -9,8 +9,10 @@ import (
 )
 
 func main() {
-	// 테스트 
-	router := gin.Default()
+	router := gin.New()
+	router.Use(gin.Logger()) 
+	router.Use(gin.Recovery())
+
 	router.POST("/user/signup", signup.Signup)
 
 	router.Run("localhost:8080")
