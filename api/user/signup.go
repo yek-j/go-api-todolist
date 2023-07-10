@@ -1,7 +1,10 @@
 package signup
 
 import (
+	"fmt"
+	"net/http"
 	connector "to-do-list/db"
+	"to-do-list/ent/user"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,6 +16,7 @@ type newUser struct {
 	Password	string	`form:"password"`
 }
 
+// 회원가입
 func Signup(c *gin.Context) {
 	var user newUser 
 	user.Name = c.PostForm("name")
@@ -37,4 +41,36 @@ func Signup(c *gin.Context) {
 		panic(err)
     }
 
+	c.JSON(http.StatusOK, gin.H{
+		"message": "ok",
+	})
+}
+
+// 이메일 중복 확인
+func Emailcheck(c *gin.Context) {
+	var email = c.PostForm("email")
+
+	db, ctx := connector.Connector()
+	check, err := db.User.
+		Query().
+		Where(user.EmailIn(email)).
+		All(ctx)
+
+	fmt.Println(len(check));
+
+	if err != nil {
+		panic(err)
+	} 
+
+	defer db.Close();
+	
+	if len(check) > 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "using",
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "ok",
+		})
+	}
 }

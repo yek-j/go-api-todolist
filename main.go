@@ -14,6 +14,7 @@ func main() {
 	router.Use(gin.Recovery())
 
 	router.POST("/user/signup", signup.Signup)
+	router.POST("/user/emailcheck", signup.Emailcheck)
 
 	router.Run("localhost:8080")
 
