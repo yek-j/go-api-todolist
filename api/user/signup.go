@@ -1,7 +1,6 @@
-package signup
+package user
 
 import (
-	"fmt"
 	"net/http"
 	connector "to-do-list/db"
 	"to-do-list/ent/user"
@@ -72,10 +71,10 @@ func Emailcheck(c *gin.Context) {
 		Where(user.EmailIn(email)).
 		All(ctx)
 
-	fmt.Println(len(check));
-
 	if err != nil {
-		panic(err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Emailcheck DB err",
+		})
 	} 
 
 	defer db.Close();
