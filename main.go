@@ -1,7 +1,7 @@
 package main
 
 import (
-	signup "to-do-list/api/user"
+	user "to-do-list/api/user"
 
 	"github.com/gin-gonic/gin"
 
@@ -13,8 +13,9 @@ func main() {
 	router.Use(gin.Logger()) 
 	router.Use(gin.Recovery())
 
-	router.POST("/user/signup", signup.Signup)
-	router.POST("/user/emailcheck", signup.Emailcheck)
+	router.POST("/user/signup", user.Signup)
+	router.POST("/user/emailcheck", user.Emailcheck)
+	router.POST("/user/signin", user.Signin)
 
 	router.Run("localhost:8080")
 
