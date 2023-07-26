@@ -2,12 +2,10 @@ package connector
 
 import (
 	"context"
-	"encoding/json"
-	"os"
-
 	"to-do-list/ent"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/spf13/viper"
 )
 
 type DBConfig struct {
@@ -18,22 +16,20 @@ type DBConfig struct {
 }
 
 func Connector() (*ent.Client, context.Context) {
-	var config DBConfig 
-	cwd, err := os.Getwd()
+	viper.SetConfigName("config")
+	viper.SetConfigType("json")
+	viper.AddConfigPath("config")
+
+	err := viper.ReadInConfig()
+
 	if err != nil {
 		panic(err)
 	}
 	
-	file, err := os.Open(cwd + "\\db\\config.json")
+	var config DBConfig
+	err = viper.Unmarshal(&config)
 
-	defer file.Close()
 	if err != nil {
-		panic(err)
-	}
-
-	configParser := json.NewDecoder(file)
-	dcerr := configParser.Decode(&config)
-	if dcerr != nil {
 		panic(err)
 	}
 
