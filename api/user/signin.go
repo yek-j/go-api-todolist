@@ -34,7 +34,7 @@ func Signin(c *gin.Context) {
 		})
 	} 
 
-	fmt.Println(user)
+	defer db.Close()
 
 	// email check
 	if len(user) == 0 {
@@ -70,6 +70,7 @@ func Signin(c *gin.Context) {
 			})
 		}
 	}
+	
 }
 
 func HashCheck(password, hash string) bool {

@@ -48,7 +48,7 @@ func Signup(c *gin.Context) {
 		return
 	} 
 
-	defer db.Close();
+	defer db.Close()
 	if err := db.Schema.Create(ctx); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "signup err",
