@@ -11,9 +11,9 @@ import (
 
 // 새 사용자
 type newUser struct {
-	Name 	string 	`form:"name"`
-	Email 	string 	`form:"email"`
-	Password	string	`form:"password"`
+	Name 	string
+	Email 	string
+	Password	string
 }
 
 // 회원가입

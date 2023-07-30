@@ -1,6 +1,7 @@
 package main
 
 import (
+	todo "to-do-list/api/todo"
 	user "to-do-list/api/user"
 
 	"github.com/gin-gonic/gin"
@@ -16,6 +17,8 @@ func main() {
 	router.POST("/user/signup", user.Signup)
 	router.POST("/user/emailcheck", user.Emailcheck)
 	router.POST("/user/signin", user.Signin)
+
+	router.POST("/todo/add", todo.Addtodo)
 
 	router.Run("localhost:8080")
 
