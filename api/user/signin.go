@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"to-do-list/api/common"
 	connector "to-do-list/db"
 	"to-do-list/ent/user"
 
@@ -15,8 +16,6 @@ import (
 )
 
 func Signin(c *gin.Context) {
-	fmt.Println("signin test")
-
 	email := c.PostForm("email")
 	password := c.PostForm("password")
 
@@ -54,7 +53,7 @@ func Signin(c *gin.Context) {
 	} else {
 		
 		// 토큰 발생 
-		token, err := GenerateToken(user[0].Name)
+		token, err := GenerateToken(user[0].Name, user[0].ID.String())
 		fmt.Println(token)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
@@ -78,13 +77,17 @@ func HashCheck(password, hash string) bool {
 	return check == nil
 }
 
-func GenerateToken(name string) (string, error) {
-	token := jwt.New(jwt.SigningMethodHS256)
+func GenerateToken(name string, id string) (string, error) {
 		
-	claims := token.Claims.(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(30 * time.Minute)
-	claims["authorized"] = true
-	claims["user"] = name
+	claims := &common.JwtClaims{
+		UserNM: name,
+		UserID: id,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Hour * 1).Unix(),
+		},
+	}
+	
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	viper.SetConfigName("config")
 	viper.SetConfigType("json")
