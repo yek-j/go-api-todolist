@@ -21,7 +21,6 @@ func ValidateToken(strToken string) (*JwtClaims, error) {
 	viper.AddConfigPath("config")
 	readErr := viper.ReadInConfig()
 	
-	fmt.Print("여기?")
 	if readErr != nil {
 		return nil, readErr
 	}
@@ -32,11 +31,10 @@ func ValidateToken(strToken string) (*JwtClaims, error) {
 		return secretkey, nil
 	})
 
-	fmt.Print("여기")
 	if err != nil {
 		return nil, err 
 	}
-	fmt.Print("여기2")
+
 	if token.Valid {
 		return &claims, nil 
 	} 
