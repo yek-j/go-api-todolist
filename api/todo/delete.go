@@ -1,7 +1,6 @@
 package todo
 
 import (
-	"fmt"
 	"net/http"
 	connector "to-do-list/db"
 
@@ -12,11 +11,11 @@ import (
 func DeleteTodo(c *gin.Context) {
 	todoId := c.Param("todoid")
 	todoUUID, err := uuid.Parse(todoId);
-	fmt.Print(todoId)
+
 	if todoId == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error" : "todoid emtpy",
-			"message": "delete Todo todoid empty",
+			"message": "deleteTodo todoid empty",
 		})
 		return
 	} else if err != nil {
