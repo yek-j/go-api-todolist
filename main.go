@@ -19,6 +19,7 @@ func main() {
 	router.POST("/user/signin", user.Signin)
 
 	router.POST("/todo/add", todo.Addtodo)
+	router.DELETE("/todo/delete/:todoid", todo.DeleteTodo)
 
 	router.Run("localhost:8080")
 
