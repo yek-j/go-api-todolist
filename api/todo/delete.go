@@ -2,6 +2,7 @@ package todo
 
 import (
 	"net/http"
+	"to-do-list/api/common"
 	connector "to-do-list/db"
 
 	"github.com/gin-gonic/gin"
@@ -9,8 +10,23 @@ import (
 )
 
 func DeleteTodo(c *gin.Context) {
+	
+	// token 확인
+	token := c.GetHeader("Authorization")
+	verifiedClaims, err :=common.ValidateToken(token)
+
+	if verifiedClaims == nil {
+		c.JSON(http.StatusNonAuthoritativeInfo, gin.H{
+			"add": "faile",
+			"error": err,
+			"message": "로그인이 필요합니다.",
+		})	
+		return 
+	}
+
 	todoId := c.Param("todoid")
 	todoUUID, err := uuid.Parse(todoId);
+
 
 	if todoId == "" {
 		c.JSON(http.StatusBadRequest, gin.H{

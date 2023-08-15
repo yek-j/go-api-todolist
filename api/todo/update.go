@@ -3,6 +3,7 @@ package todo
 import (
 	"net/http"
 	"strconv"
+	"to-do-list/api/common"
 	connector "to-do-list/db"
 
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,20 @@ import (
 )
 
 func UpdateTodoCheck(c *gin.Context) {
+	
+	// token 확인
+	token := c.GetHeader("Authorization")
+	verifiedClaims, err :=common.ValidateToken(token)
+	
+	if verifiedClaims == nil {
+		c.JSON(http.StatusNonAuthoritativeInfo, gin.H{
+			"add": "faile",
+			"error": err,
+			"message": "로그인이 필요합니다.",
+		})	
+		return 
+	}
+	
 	todoId := c.Param("todoid")
 	check, _ := strconv.ParseBool(c.PostForm("check"))
 
@@ -47,6 +62,19 @@ func UpdateTodoCheck(c *gin.Context) {
 }
 
 func UpdateTodoContent(c *gin.Context) {
+	// token 확인
+	token := c.GetHeader("Authorization")
+	verifiedClaims, err :=common.ValidateToken(token)
+	
+	if verifiedClaims == nil {
+		c.JSON(http.StatusNonAuthoritativeInfo, gin.H{
+			"add": "faile",
+			"error": err,
+			"message": "로그인이 필요합니다.",
+		})	
+		return 
+	}
+	
 	todoId := c.Param("todoid")
 	content := c.PostForm("content")
 

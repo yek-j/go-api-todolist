@@ -17,11 +17,6 @@ type newTodo struct {
 }
 
 func Addtodo(c *gin.Context) {
-	var todo newTodo 
-	todo.Content = c.PostForm("content")
-	todo.Check, _ = strconv.ParseBool(c.PostForm("check"))
-	todo.UserID = c.PostForm("userid")
-
 	// token 확인
 	token := c.GetHeader("Authorization")
 	verifiedClaims, err :=common.ValidateToken(token)
@@ -34,6 +29,11 @@ func Addtodo(c *gin.Context) {
 		})	
 		return 
 	}
+	
+	var todo newTodo 
+	todo.Content = c.PostForm("content")
+	todo.Check, _ = strconv.ParseBool(c.PostForm("check"))
+	todo.UserID = c.PostForm("userid")
 
 	userID, err := uuid.Parse(verifiedClaims.UserID)
 	if err != nil {
