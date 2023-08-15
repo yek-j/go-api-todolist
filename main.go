@@ -22,6 +22,7 @@ func main() {
 	router.DELETE("/todo/delete/:todoid", todo.DeleteTodo)
 	router.PUT("/todo/update/check/:todoid", todo.UpdateTodoCheck)
 	router.PUT("/todo/update/content/:todoid", todo.UpdateTodoContent)
+	router.GET("/todo/list/", todo.TodoList)
 
 	router.Run("localhost:8080")
 
